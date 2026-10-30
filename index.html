@@ -3,336 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video AI Studio - Netflix Style</title>
+    <title>AI Studio - Netflix Style</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Thème par défaut : Netflix */
-            --primary-color: #E50914;
             --bg-color: #141414;
-            --surface-color: #1f1f1f;
+            --surface-color: #181818;
+            --primary-color: #E50914;
             --text-color: #ffffff;
         }
-
-        /* 8 Thèmes prédéfinis */
-        [data-theme="netflix"] { --primary-color: #E50914; --bg-color: #141414; --surface-color: #1f1f1f; }
-        [data-theme="pixar"] { --primary-color: #4A90E2; --bg-color: #1a1a2e; --surface-color: #16213e; }
-        [data-theme="scifi"] { --primary-color: #00FFCC; --bg-color: #0d0d0d; --surface-color: #1a1a1a; }
-        [data-theme="action"] { --primary-color: #FF4500; --bg-color: #1a0a0a; --surface-color: #2a1515; }
-        [data-theme="drama"] { --primary-color: #8A2BE2; --bg-color: #0f0a1a; --surface-color: #1a1525; }
-        [data-theme="dark"] { --primary-color: #555555; --bg-color: #000000; --surface-color: #111111; }
-        [data-theme="gold"] { --primary-color: #FFD700; --bg-color: #121212; --surface-color: #222222; }
-        [data-theme="cyberpunk"] { --primary-color: #FF00FF; --bg-color: #1a001a; --surface-color: #2a002a; }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            transition: all 0.3s ease;
-            min-height: 100vh;
-            padding: 20px;
+            overflow-x: hidden;
         }
 
-        /* Header style Netflix */
-        header {
+        /* Barre de navigation Netflix */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 4%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #333;
-            margin-bottom: 30px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+            z-index: 100;
         }
 
-        h1 {
-            color: var(--primary-color);
-            font-size: 24px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .controls { display: flex; gap: 15px; align-items: center; }
+        .logo { color: var(--primary-color); font-size: 28px; font-weight: 800; letter-spacing: 1px; }
         
-        select {
-            background: var(--surface-color);
-            color: var(--text-color);
-            border: 1px solid #444;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-        }
+        .nav-links { display: flex; gap: 20px; font-size: 14px; }
+        .nav-links a { color: #e5e5e5; text-decoration: none; transition: 0.3s; }
+        .nav-links a:hover { color: #b3b3b3; }
 
-        /* Zone principale */
-        .studio-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--surface-color);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-
-        .form-group { margin-bottom: 20px; }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #ccc;
-            font-size: 14px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 200px;
-            background: var(--bg-color);
-            color: var(--text-color);
-            border: 1px solid #444;
-            padding: 15px;
-            border-radius: 4px;
-            font-size: 14px;
-            resize: vertical;
-        }
-
-        .row {
+        /* Bannière Principale (Hero) */
+        .hero {
+            height: 70vh;
+            background: linear-gradient(to right, rgba(20,20,20,1) 0%, rgba(20,20,20,0.6) 50%, rgba(20,20,20,1) 100%),
+                        linear-gradient(45deg, #1a001a, #0a1f3d, #2b0015);
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 4%;
+            margin-bottom: 20px;
         }
-        
-        .row .form-group { flex: 1; }
 
-        /* Bouton style Netflix */
-        button {
-            background-color: var(--primary-color);
-            color: #fff;
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            color: #ccc;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Boutons */
+        .btn {
+            padding: 12px 28px;
+            border-radius: 4px;
             border: none;
-            padding: 15px 30px;
-            font-size: 16px;
+            font-size: 1.1rem;
             font-weight: 600;
-            border-radius: 4px;
             cursor: pointer;
-            width: 100%;
-            transition: transform 0.1s, opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
         }
 
-        button:hover { opacity: 0.9; transform: scale(1.02); }
-        button:disabled { background-color: #555; cursor: not-allowed; transform: none; }
+        .btn-play { background-color: #ffffff; color: #000000; }
+        .btn-play:hover { background-color: rgba(255, 255, 255, 0.7); }
+        
+        .btn-info { background-color: rgba(109, 109, 110, 0.7); color: white; margin-left: 15px; }
+        .btn-info:hover { background-color: rgba(109, 109, 110, 0.4); }
 
-        /* Barre de progression */
-        .progress-wrapper {
-            margin-top: 30px;
-            display: none;
-        }
-
-        .progress-info {
+        /* Rangées de séries/films */
+        .row { margin-bottom: 40px; padding-left: 4%; }
+        .row-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; color: #e5e5e5; }
+        
+        .carousel {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #ccc;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scrollbar-width: none; /* Firefox */
         }
+        .carousel::-webkit-scrollbar { display: none; /* Chrome */ }
 
-        .progress-bar-container {
-            width: 100%;
-            height: 10px;
-            background: #000;
-            border-radius: 5px;
+        .card {
+            min-width: 220px;
+            height: 130px;
+            background: var(--surface-color);
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s, z-index 0.3s;
+            display: flex;
+            align-items: flex-end;
+            padding: 15px;
             overflow: hidden;
         }
 
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: var(--primary-color);
-            transition: width 0.3s ease;
+        /* Dégradés pour faire genre d'affiches de films */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            z-index: 1;
         }
 
-        /* Découpage */
-        .split-options {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
+        .card-pixar { background: linear-gradient(45deg, #003366, #0099ff); }
+        .card-scifi { background: linear-gradient(45deg, #001a00, #00cc66); }
+        .card-action { background: linear-gradient(45deg, #330000, #ff3300); }
+        .card-drama { background: linear-gradient(45deg, #1a0033, #6600cc); }
+
+        .card:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
-        .split-btn {
-            background: transparent;
-            border: 1px solid #444;
-            color: #ccc;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            width: auto;
-        }
-        
-        .split-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
+        .card-title {
+            position: relative;
+            z-index: 2;
+            font-weight: 600;
+            font-size: 1rem;
+            text-shadow: 1px 1px 2px #000;
         }
 
-        .card-preview {
-            margin-top: 20px;
-            padding: 15px;
-            border-left: 4px solid var(--primary-color);
-            background: rgba(0,0,0,0.3);
-            font-size: 14px;
+        /* Modale de Génération (Cachée par défaut) */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
             display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
         }
 
+        .modal-content {
+            background: #141414;
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 1px solid #333;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .close-btn { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 14px; color: #aaa; }
+        
+        input[type="text"], textarea, select {
+            width: 100%;
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        textarea { height: 120px; resize: vertical; }
+
+        /* Boutons de découpage */
+        .chips { display: flex; gap: 10px; flex-wrap: wrap; }
+        .chip {
+            background: #333; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 13px;
+        }
+        .chip.active { background: var(--primary-color); }
+
+        /* Barre de progression */
+        .progress-container { display: none; margin-top: 20px; }
+        .progress-bar {
+            width: 100%; height: 8px; background: #333; border-radius: 4px; overflow: hidden; margin-top: 10px;
+        }
+        .progress-fill {
+            height: 100%; width: 0%; background: var(--primary-color); transition: width 0.3s;
+        }
     </style>
 </head>
-<body data-theme="netflix">
+<body>
 
-    <header>
-        <h1>Video AI Studio</h1>
-        <div class="controls">
-            <select id="themeSelector" onchange="changeTheme(this.value)">
-                <option value="netflix">Thème Netflix (Rouge)</option>
-                <option value="pixar">Thème Pixar (Bleu)</option>
-                <option value="scifi">Thème Sci-Fi (Cyan)</option>
-                <option value="action">Thème Action (Orange)</option>
-                <option value="drama">Thème Drame (Violet)</option>
-                <option value="dark">Thème Sombre</option>
-                <option value="gold">Thème Gold</option>
-                <option value="cyberpunk">Thème Cyberpunk (Rose)</option>
-            </select>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">AI STUDIO</div>
+        <div class="nav-links">
+            <a href="#">Accueil</a>
+            <a href="#">Séries</a>
+            <a href="#">Films</a>
+            <a href="#" style="color: var(--primary-color); font-weight: bold;">+ Créer</a>
         </div>
-    </header>
+    </nav>
 
-    <div class="studio-container">
-        <div class="form-group">
-            <label for="script">Script ou Prompt (jusqu'à 100 000 caractères)</label>
-            <textarea id="script" placeholder="Décrivez votre film, votre série ou votre scène ici..."></textarea>
+    <!-- Bannière Principale -->
+    <div class="hero">
+        <h1>Générez votre univers</h1>
+        <p>Créez des films et séries avec l'IA. Choisissez votre style : Pixar 3D, Science-Fiction, Action ou Drame. Prêt à devenir réalisateur ?</p>
+        <div>
+            <button class="btn btn-play" onclick="openModal()">▶ Commencer la création</button>
+            <button class="btn btn-info">ℹ Plus d'infos</button>
         </div>
+    </div>
 
-        <div class="row">
+    <!-- Rangées de contenu -->
+    <div class="row">
+        <h2 class="row-title">Styles Populaires</h2>
+        <div class="carousel">
+            <div class="card card-pixar" onclick="openModal()"><span class="card-title">Pixar 3D</span></div>
+            <div class="card card-scifi" onclick="openModal()"><span class="card-title">Science-Fiction</span></div>
+            <div class="card card-action" onclick="openModal()"><span class="card-title">Action</span></div>
+            <div class="card card-drama" onclick="openModal()"><span class="card-title">Drame</span></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <h2 class="row-title">Tendances Actuelles</h2>
+        <div class="carousel">
+            <div class="card card-scifi" onclick="openModal()"><span class="card-title">Le Futur de l'IA</span></div>
+            <div class="card card-pixar" onclick="openModal()"><span class="card-title">Le Voyage de Pixel</span></div>
+            <div class="card card-action" onclick="openModal()"><span class="card-title">Course Mortelle</span></div>
+            <div class="card card-drama" onclick="openModal()"><span class="card-title">Larmes de Robot</span></div>
+        </div>
+    </div>
+
+    <!-- Modale de Génération -->
+    <div class="modal-overlay" id="creationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nouveau Projet Vidéo</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+
             <div class="form-group">
-                <label for="style">Style Visuel</label>
-                <select id="style">
-                    <option value="pixar">Pixar 3D</option>
-                    <option value="scifi">Science-Fiction</option>
-                    <option value="action">Action</option>
-                    <option value="drama">Drame</option>
-                </select>
+                <label>Votre script ou idée (Max 100 000 caractères)</label>
+                <textarea id="scriptInput" placeholder="Il était une fois, dans un monde de robots..."></textarea>
             </div>
+
+            <div class="form-group" style="display: flex; gap: 15px;">
+                <div style="flex: 1;">
+                    <label>Style Visuel</label>
+                    <select id="styleSelect">
+                        <option>Pixar 3D</option>
+                        <option>Science-Fiction</option>
+                        <option>Action</option>
+                        <option>Drame</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label>Plateforme cible</label>
+                    <select id="platformSelect">
+                        <option>TikTok (Vertical)</option>
+                        <option>YouTube (Horizontal)</option>
+                        <option>Instagram Reels</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="form-group">
-                <label for="platform">Format de sortie</label>
-                <select id="platform">
-                    <option value="tiktok">TikTok (Vertical)</option>
-                    <option value="youtube">YouTube (Horizontal)</option>
-                    <option value="instagram">Instagram Reels</option>
-                </select>
+                <label>Découpage des clips</label>
+                <div class="chips">
+                    <button class="chip active" onclick="setChip(this)">8 sec</button>
+                    <button class="chip" onclick="setChip(this)">10 sec</button>
+                    <button class="chip" onclick="setChip(this)">20 sec</button>
+                    <button class="chip" onclick="setChip(this)">1 min</button>
+                    <button class="chip" onclick="setChip(this)">5 min</button>
+                    <button class="chip" onclick="setChip(this)">45 min</button>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>Découpage des clips (Durée par segment)</label>
-            <div class="split-options">
-                <button class="split-btn active" onclick="setSplit(this, '8s')">8 sec</button>
-                <button class="split-btn" onclick="setSplit(this, '10s')">10 sec</button>
-                <button class="split-btn" onclick="setSplit(this, '20s')">20 sec</button>
-                <button class="split-btn" onclick="setSplit(this, '1m')">1 min</button>
-                <button class="split-btn" onclick="setSplit(this, '5m')">5 min</button>
-                <button class="split-btn" onclick="setSplit(this, '45m')">45 min</button>
+            <button class="btn btn-play" style="width: 100%; justify-content: center;" onclick="startGeneration()">
+                🚀 Lancer la génération
+            </button>
+
+            <!-- Barre de progression -->
+            <div class="progress-container" id="progressContainer">
+                <div style="display: flex; justify-content: space-between; font-size: 14px; color: #ccc;">
+                    <span id="statusText">Initialisation du serveur...</span>
+                    <span id="percentText">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
             </div>
-        </div>
-
-        <button id="generateBtn" onclick="startGeneration()">Générer la vidéo</button>
-
-        <!-- Barre de progression -->
-        <div class="progress-wrapper" id="progressWrapper">
-            <div class="progress-info">
-                <span id="statusText">Initialisation...</span>
-                <span id="percentText">0%</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-        </div>
-
-        <div class="card-preview" id="previewCard">
-            <h3 style="color: var(--primary-color); margin-bottom: 10px;">Paramètres validés</h3>
-            <p><strong>Longueur du script :</strong> <span id="prevScriptLength">0</span> caractères</p>
-            <p><strong>Style :</strong> <span id="prevStyle">-</span></p>
-            <p><strong>Plateforme :</strong> <span id="prevPlatform">-</span></p>
-            <p><strong>Découpage :</strong> <span id="prevSplit">-</span></p>
-            <br>
-            <p style="color: #aaa; font-size: 12px;">Prêt à être envoyé au serveur Agnes AI et Ollama.</p>
         </div>
     </div>
 
     <script>
-        let currentSplit = '8s';
+        // Ouvrir et fermer la modale
+        function openModal() { document.getElementById('creationModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('creationModal').style.display = 'none'; }
 
-        // Changer de thème
-        function changeTheme(theme) {
-            document.body.setAttribute('data-theme', theme);
-        }
-
-        // Changer l'option de découpage
-        function setSplit(btn, value) {
-            document.querySelectorAll('.split-btn').forEach(b => b.classList.remove('active'));
+        // Gérer les boutons de découpage
+        function setChip(btn) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             btn.classList.add('active');
-            currentSplit = value;
         }
 
-        // Simulation de génération (pour tester l'interface)
+        // Simulation de génération
         function startGeneration() {
-            const script = document.getElementById('script').value;
-            if (script.trim() === '') {
-                alert("Veuillez entrer un script avant de générer.");
-                return;
-            }
+            const script = document.getElementById('scriptInput').value;
+            if (!script) { alert("Veuillez écrire un script !"); return; }
 
-            const style = document.getElementById('style').value;
-            const platform = document.getElementById('platform').value;
+            const container = document.getElementById('progressContainer');
+            const fill = document.getElementById('progressFill');
+            const text = document.getElementById('statusText');
+            const percent = document.getElementById('percentText');
             
-            // Afficher les paramètres
-            document.getElementById('prevScriptLength').innerText = script.length;
-            document.getElementById('prevStyle').innerText = style;
-            document.getElementById('prevPlatform').innerText = platform;
-            document.getElementById('prevSplit').innerText = currentSplit;
-            document.getElementById('previewCard').style.display = 'block';
-
-            // Préparer l'UI de progression
-            const btn = document.getElementById('generateBtn');
-            const wrapper = document.getElementById('progressWrapper');
-            const bar = document.getElementById('progressBar');
-            const status = document.getElementById('statusText');
-            const percentText = document.getElementById('percentText');
-
-            btn.disabled = true;
-            btn.innerText = "Génération en cours...";
-            wrapper.style.display = 'block';
-            
+            container.style.display = 'block';
             let progress = 0;
-            
-            // Simulation d'une barre de progression
+
+            // Animation de la barre
             const interval = setInterval(() => {
-                // Vitesse aléatoire pour simuler le traitement
-                progress += Math.random() * 5; 
-                
+                progress += Math.random() * 10;
                 if (progress > 100) progress = 100;
                 
-                bar.style.width = progress + '%';
-                percentText.innerText = Math.floor(progress) + '%';
+                fill.style.width = progress + '%';
+                percent.innerText = Math.floor(progress) + '%';
 
-                // Changer le texte de statut
-                if (progress < 20) {
-                    status.innerText = "Analyse du script par Ollama...";
-                } else if (progress < 80) {
-                    status.innerText = "Génération des clips via Agnes AI...";
-                } else if (progress < 100) {
-                    status.innerText = "Assemblage final...";
-                } else {
-                    status.innerText = "Terminé !";
+                if (progress < 30) text.innerText = "Ollama analyse votre script...";
+                else if (progress < 80) text.innerText = "Agnes AI génère les clips vidéo...";
+                else if (progress < 100) text.innerText = "FFmpeg assemble le film...";
+                else {
+                    text.innerText = "Terminé !";
                     clearInterval(interval);
-                    btn.disabled = false;
-                    btn.innerText = "Générer la vidéo";
-                    alert("Simulation terminée ! (Le backend doit être connecté pour la vraie génération).");
+                    alert("Ceci est un aperçu du design. Sur PC, la vraie génération démarrera !");
                 }
             }, 300);
         }
